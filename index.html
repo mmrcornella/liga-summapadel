@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Liga Summapadel 2025 - Dashboard</title>
+
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <style>
+    body { font-family: Arial; margin: 20px; }
+    table { border-collapse: collapse; width: 100%; margin-top: 20px; }
+    th, td { border: 1px solid #ccc; padding: 6px 8px; }
+    th { cursor: pointer; background: #f0f0f0; }
+    #charts { display: flex; flex-wrap: wrap; gap: 30px; margin-top: 30px; }
+    canvas { max-width: 400px; max-height: 300px; }
+    .filters { margin-top: 20px; display: flex; gap: 20px; flex-wrap: wrap; }
+    .filters div { display: flex; flex-direction: column; }
+  </style>
+</head>
+
+<body>
+  <h1>Liga Summapadel 2025 - Dashboard Completo</h1>
+
+  <input type="file" id="fileInput" accept=".xlsx,.xls" />
+
+  <div class="filters">
+    <div>
+      <label>Posición</label>
+      <select id="filterPos">
+        <option value="">Todas</option>
+        <option value="I">Izquierda</option>
+        <option value="D">Derecha</option>
+        <option value="D-I">Ambos</option>
+      </select>
+    </div>
+
+    <div>
+      <label>Convocado</label>
+      <select id="filterConv">
+        <option value="">Todos</option>
+        <option value="1">Convocados</option>
+        <option value="0">No convocados</option>
+      </select>
+    </div>
+
+    <div>
+      <label>Mínimo de victorias liga</label>
+      <input type="number" id="filterVict" min="0" value="0">
+    </div>
+
+    <div>
+      <label>Mínimo de entrenos</label>
+      <input type="number" id="filterEntr" min="0" value="0">
+    </div>
+
+    <button onclick="applyFilters()">Aplicar filtros</button>
+  </div>
+
+  <table id="playersTable">
+    <thead id="tableHead"></thead>
+    <tbody id="tableBody"></tbody>
+  </table>
+
+  <div id="charts">
+    <div><h3>Victorias Liga</h3><canvas id="victoriasLigaChart"></canvas></div>
+    <div><h3>Victorias Americana</h3><canvas id="victoriasAmericanaChart"></canvas></div>
+    <div><h3>Puntos Acumulados</h3><canvas id="puntosChart"></canvas></div>
+    <div><h3>Entrenos</h3><canvas id="entrenosChart"></canvas></div>
+    <div><h3>Nota Media</h3><canvas id="notaChart"></canvas></div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

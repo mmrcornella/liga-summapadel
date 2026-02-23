@@ -1,0 +1,13 @@
+{
+  "name": "liga-summapadel",
+  "version": "1.0.0",
+  "description": "App móvil Liga Summapadel",
+  "main": "index.html",
+  "scripts": {
+    "build": "echo 'No build step needed'"
+  },
+  "dependencies": {
+    "@capacitor/android": "latest",
+    "@capacitor/core": "latest"
+  }
+}

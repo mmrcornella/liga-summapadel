@@ -1,0 +1,6 @@
+{
+  "appId": "com.summapadel.liga",
+  "appName": "Liga Summapadel",
+  "webDir": "./",
+  "bundledWebRuntime": false
+}
