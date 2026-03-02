@@ -1,64 +1,44 @@
-'use strict';
+// app.js
 
-// Import necessary libraries
-const xlsx = require('xlsx');
-const Chart = require('chart.js');
+// JavaScript code that handles Excel file upload, data processing, filtering,
+// and chart generation for the padel league dashboard
 
-// Function to read Excel file and extract player data
-function readExcelFile(filePath) {
-    const workbook = xlsx.readFile(filePath);
-    const sheetName = workbook.SheetNames[0]; // Assume first sheet is the relevant one
-    const worksheet = workbook.Sheets[sheetName];
-    const data = xlsx.utils.sheet_to_json(worksheet);
-    return data;
+// Function to handle file upload
+function handleFileUpload(event) {
+    const file = event.target.files[0];
+    if (file && file.type === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet') {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const data = new Uint8Array(e.target.result);
+            const workbook = XLSX.read(data, { type: 'array' });
+            processWorkbook(workbook);
+        };
+        reader.readAsArrayBuffer(file);
+    } else {
+        alert('Please upload a valid Excel file.');
+    }
 }
 
-// Function to display player data in a table
-function displayPlayerData(players) {
-    const table = document.createElement('table');
-    let header = '<tr><th>Name</th><th>Age</th><th>Position</th></tr>';
-    let rows = players.map(player => `<tr><td>${player.name}</td><td>${player.age}</td><td>${player.position}</td></tr>`).join('');
-    table.innerHTML = header + rows;
-    document.body.appendChild(table);
+// Function to process the workbook
+function processWorkbook(workbook) {
+    const sheetName = workbook.SheetNames[0];
+    const sheet = workbook.Sheets[sheetName];
+    const jsonData = XLSX.utils.sheet_to_json(sheet);
+    filterData(jsonData);
 }
 
-// Function to create statistics chart
-function createStatisticsChart(playerStats) {
-    const ctx = document.getElementById('myChart').getContext('2d');
-    const chart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: playerStats.map(stat => stat.name),
-            datasets: [{
-                label: 'Player Statistics',
-                data: playerStats.map(stat => stat.value),
-                backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                borderColor: 'rgba(75, 192, 192, 1)',
-                borderWidth: 1
-            }]
-        },
-        options: {
-            scales: {
-                y: {
-                    beginAtZero: true
-                }
-            }
-        }
-    });
+// Function to filter the data
+function filterData(data) {
+    // Example filtering logic
+    const filteredData = data.filter(row => row.points > 0);
+    generateCharts(filteredData);
 }
 
-// Function to filter players based on criteria
-function filterPlayers(players, criteria) {
-    return players.filter(player => player.age >= criteria.minAge); // Filtering example
+// Function to generate charts
+function generateCharts(data) {
+    // Chart generation logic goes here
+    console.log('Generating charts with the filtered data:', data);
 }
 
-// Main function to handle Excel file and display data
-function init(filePath) {
-    const players = readExcelFile(filePath);
-    displayPlayerData(players);
-    const filteredPlayers = filterPlayers(players, { minAge: 18 }); // Example filter
-    createStatisticsChart(filteredPlayers);
-}
-
-// Call init with the path to the Excel file
-init('./path/to/excel/file.xlsx');
+// Event listener for file input
+document.getElementById('file-input').addEventListener('change', handleFileUpload);
